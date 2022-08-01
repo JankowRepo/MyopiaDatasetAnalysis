@@ -27,7 +27,7 @@ def Run_KNN(number_of_repeats, X, y, K, test_size):
 
         y_pred = classifier.predict(X_test)
 
-
+        sc=f1_score(y_test, Y-y_pred)
 
         conf_matx = confusion_matrix(y_test, y_pred)
         acc = accuracy_score(y_test, y_pred)

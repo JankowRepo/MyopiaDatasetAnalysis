@@ -6,7 +6,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, matthews_corrcoef, roc_curve
 from sklearn.model_selection import cross_val_score, cross_validate, cross_val_predict
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import scale
+from sklearn.preprocessing import scale, StandardScaler
 from sklearn.feature_selection import SelectKBest, chi2
 from imblearn.over_sampling import SMOTE
 from sklearn import metrics
@@ -17,7 +17,7 @@ def ChooseSamples(df, method):
     X = df.iloc[:, :-4].values  # attributes
     y = df.iloc[:, -1].values  # decision classes
     X = SelectKBest(score_func=chi2, k=2).fit_transform(X, y)
-
+    X = StandardScaler().fit_transform(X)
     if method == 1:
         X, y = SMOTE().fit_resample(X, y)
 
@@ -105,7 +105,7 @@ def Show_KNN_Plot(df, numberOfParts, max_k, repeats, method):
     plt.show()
 
 
-def Show_ROC_Plot(df, numberOfParts, method, k):
+def Show_ROC_Plot(df, method, k):
     X, y = ChooseSamples(df, method)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
@@ -138,13 +138,13 @@ df = pd.read_excel("4. Normalized_Data3.xlsx")
 
 method_for_balance_data = 1  # 0=No method, 1=Oversampling, 2=Undersampling
 number_of_repeats = 100
-k = 13
+k = 3
 number_of_parts_for_CV = 5
 years = 5
-# Run_KNN(number_of_repeats, df, k, number_of_parts_for_CV, method_for_balance_data)
+Run_KNN(number_of_repeats, df, k, number_of_parts_for_CV, method_for_balance_data)
 
 max_k = 100
 # Show_KNN_Plot(df, number_of_parts_for_CV, max_k,number_of_repeats, method_for_balance_data)
 
 
-Show_ROC_Plot(df, number_of_parts_for_CV, method_for_balance_data, k)
+# Show_ROC_Plot(df, method_for_balance_data, k)
